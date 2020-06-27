@@ -1,39 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import html2canvas from 'html2canvas';
-import * as jsPDF from 'jspdf';
+import { Component } from '@angular/core';
+import * as html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  ngOnInit(): void {
-    this.printBetterQuality();
-  }
+  public export(): void {
+    const element = document.getElementById('element-to-export');
+    const options = {
+      filename:     'myfile.pdf',
+      image:        { type: 'jpeg' },
+      html2canvas:  { },
+      jsPDF:        { orientation: 'portrait' }
+    };
 
-  private print(): void {
-    const filename  = 'ThisIsYourPDFFilename.pdf';
-
-    html2canvas(document.querySelector('#nodeToRenderAsPDF')).then(canvas => {
-      let pdf = new jsPDF('p', 'mm', 'a4');
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
-      pdf.save(filename);
-    });
-  }
-
-// Variant
-// This one lets you improve the PDF sharpness by scaling up the HTML node tree to render as an image before getting pasted on the PDF.
-  private printBetterQuality(quality = 1): void {
-    const filename  = 'ThisIsYourPDFFilename.pdf';
-
-    html2canvas(document.querySelector('#nodeToRenderAsPDF'),
-      {scale: quality}
-    ).then(canvas => {
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
-      pdf.save(filename);
-    });
+    html2pdf().set(options).from(element).save();
   }
 }
