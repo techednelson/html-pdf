@@ -8,7 +8,10 @@ import * as html2pdf from 'html2pdf.js';
 })
 export class AppComponent {
 
+  dynamicTitle: string;
+
   public export(): void {
+    this.dynamicTitle = 'Three Dots';
     const element = document.getElementById('element-to-export');
     const options = {
       filename:     'myfile.pdf',
